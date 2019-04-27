@@ -61,12 +61,12 @@ public class ResultMapping implements Iterable<Map<String, Object>> {
             @Override
             public Map<String, Object> next() {
                 Map<String, Object> result = new HashMap<>();
-                for (int i = 0; i < columnCount; i++) {
-                    try {
+                try {
+                    for (int i = 0; i < columnCount; i++) {
                         result.put(columnLabel[i], typeHandlers[i].getResult(resultSet, i + 1));
-                    } catch (SQLException e) {
-                        throw new ExportException("获取" + id + "节点结果集 第 " + rowNumber + "行， 第 " + (i + 1) + "列失败" , e);
                     }
+                } catch (SQLException e) {
+                    throw new ExportException("获取" + id + "节点结果集 第 " + rowNumber + "行， 第 " + (i + 1) + "列失败" , e);
                 }
                 return result;
             }
