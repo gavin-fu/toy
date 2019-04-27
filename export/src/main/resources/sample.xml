@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE export PUBLIC "-//export.gavin.ren//DTD Config//EN" "http://export.gavin.ren/dtd/export-config.dtd">
+<export root="user">
+    <select id="user">
+        SELECT ID, user_name FROM TEST.SYS_USER
+    </select>
+
+    <select id="role" parent="user" key="ID">
+        select  	b.user_id 	as id
+                    ,a.id 		as role_id
+                    ,a.role_name
+        from 		test.sys_role a
+        inner join 	test.sys_user_role b
+        on			a.id = b.role_id
+    </select>
+
+    <select id="privilege" parent="role" key="role_id">
+        select * from test.sys_role_privilege
+    </select>
+</export>

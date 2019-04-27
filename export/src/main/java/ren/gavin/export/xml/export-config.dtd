@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!ELEMENT export (select+)>
+<!ATTLIST export root IDREF #REQUIRED>
+
+<!ELEMENT select (#PCDATA)>
+<!ATTLIST select
+id ID #REQUIRED
+parent IDREF #IMPLIED
+key CDATA #IMPLIED
+>
