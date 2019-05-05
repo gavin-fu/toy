@@ -61,8 +61,9 @@ public class ResultMapping implements Iterable<Map<String, Object>> {
             @Override
             public Map<String, Object> next() {
                 Map<String, Object> result = new HashMap<>();
+                int i = 0;
                 try {
-                    for (int i = 0; i < columnCount; i++) {
+                    for (; i < columnCount; i++) {
                         result.put(columnLabel[i], typeHandlers[i].getResult(resultSet, i + 1));
                     }
                 } catch (SQLException e) {

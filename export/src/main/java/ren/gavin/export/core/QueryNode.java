@@ -27,11 +27,14 @@ public class QueryNode {
     /** 数据库连接 */
     private Connection connection;
 
+    /** SQL声明 */
+    private Statement statement;
+
     /** 结果集映射 */
     private ResultMapping resultMapping;
 
     public List query() throws SQLException {
-        Statement statement = connection.createStatement();
+        statement = connection.createStatement();
         Validate.requireTrue(statement.execute(sqlSource), "未查询到结果集：" + sqlSource);
 
         resultMapping = new ResultMapping(id, statement.getResultSet());
@@ -88,7 +91,7 @@ public class QueryNode {
     @SuppressWarnings("unchecked")
     private void query(Map<Object, Object> bucket) throws SQLException {
         if (bucket == null || bucket.size() == 0) return;
-        Statement statement = connection.createStatement();
+        statement = connection.createStatement();
         Validate.requireTrue(statement.execute(sqlSource), "未查询到结果集：" + sqlSource);
 
         List<Map<String, Object>> result = new ArrayList<>();
@@ -121,7 +124,7 @@ public class QueryNode {
     }
 
     public void close() {
-        closeResultMapping();
+        close1();
         if (null != connection) {
             try {
                 connection.close();
@@ -131,13 +134,20 @@ public class QueryNode {
         }
     }
 
-    private void closeResultMapping() {
+    private void close1() {
+        if (null != statement) {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                // ignore
+            }
+        }
         if (null != resultMapping) {
             resultMapping.close();
         }
         if (null != children) {
             for (QueryNode child : children) {
-                child.closeResultMapping();
+                child.close1();
             }
         }
     }
